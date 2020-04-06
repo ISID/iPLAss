@@ -29,14 +29,19 @@ import org.iplass.adminconsole.client.metadata.ui.entity.layout.item.element.sec
 import org.iplass.adminconsole.client.metadata.ui.entity.layout.item.element.section.MassReferenceSectionControl;
 import org.iplass.adminconsole.client.metadata.ui.entity.layout.item.element.section.ReferenceSectionControl;
 import org.iplass.adminconsole.client.metadata.ui.entity.layout.item.element.section.SectionControl;
+import org.iplass.adminconsole.client.metadata.ui.entity.layout.item.element.section.SectionController;
 import org.iplass.adminconsole.view.annotation.generic.FieldReferenceType;
 import org.iplass.mtp.entity.definition.EntityDefinition;
 import org.iplass.mtp.view.generic.DetailFormView;
 import org.iplass.mtp.view.generic.element.section.Section;
 
+import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.types.HeaderControls;
 
 public class DetailFormViewControl extends ItemControl {
+
+	/** SectionWindowController */
+	private SectionController sectionController = GWT.create(SectionController.class);
 
 	/** 重複チェック用のリスト */
 	private List<String> propList = new ArrayList<String>();

@@ -21,7 +21,6 @@
 package org.iplass.adminconsole.client.metadata.ui.top.item;
 
 import org.iplass.adminconsole.client.base.ui.widget.AbstractWindow;
-import org.iplass.mtp.view.top.parts.TopViewParts;
 
 /**
  *
@@ -47,7 +46,7 @@ public abstract class PartsItem extends AbstractWindow {
 		setStyleName("");
 	}
 
-	public abstract TopViewParts getParts();
+	public abstract <T> T getParts();
 
 	public void setDropAreaType(String dropAreaType) {
 		this.dropAreaType = dropAreaType;

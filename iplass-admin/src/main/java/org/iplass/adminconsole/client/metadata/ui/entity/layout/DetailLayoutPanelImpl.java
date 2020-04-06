@@ -93,6 +93,7 @@ public class DetailLayoutPanelImpl extends MetaDataMainEditPane implements Detai
 	public DetailLayoutPanelImpl() {
 	}
 
+	@Override
 	public void setTarget(final MetaDataItemMenuTreeNode targetNode, EntityPlugin manager) {
 		super.setTarget(targetNode, manager);
 
@@ -513,7 +514,7 @@ public class DetailLayoutPanelImpl extends MetaDataMainEditPane implements Detai
 			public void execute(Boolean value) {
 				if (value) {
 					//新規Viewの名前を取得
-					CreateViewDialog dialog = new CreateViewDialog(service, defName);
+					CreateViewDialog<EntityView> dialog = new CreateViewDialog<>(service, defName, EntityView.class);
 					dialog.setOkClickHandler(new AddEventHandler());
 					dialog.show();
 				}
@@ -773,7 +774,7 @@ public class DetailLayoutPanelImpl extends MetaDataMainEditPane implements Detai
 			public void execute(Boolean value) {
 				if (value) {
 					//新規Viewの名前を取得
-					CreateViewDialog dialog = new CreateViewDialog(service, defName);
+					CreateViewDialog<EntityView> dialog = new CreateViewDialog<>(service, defName, EntityView.class);
 					dialog.setOkClickHandler(new AddEventHandler());
 					dialog.show();
 				}

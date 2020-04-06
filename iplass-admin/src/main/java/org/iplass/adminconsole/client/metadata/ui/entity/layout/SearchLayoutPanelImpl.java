@@ -511,7 +511,7 @@ public class SearchLayoutPanelImpl extends MetaDataMainEditPane implements Searc
 			public void execute(Boolean value) {
 				if (value) {
 					//新規Viewの名前を取得
-					CreateViewDialog dialog = new CreateViewDialog(service, defName);
+					CreateViewDialog<EntityView> dialog = new CreateViewDialog<>(service, defName, EntityView.class);
 					dialog.setOkClickHandler(new AddEventHandler());
 					dialog.show();
 				}
@@ -771,7 +771,7 @@ public class SearchLayoutPanelImpl extends MetaDataMainEditPane implements Searc
 			public void execute(Boolean value) {
 				if (value) {
 					//新規Viewの名前を取得
-					CreateViewDialog dialog = new CreateViewDialog(service, defName);
+					CreateViewDialog<EntityView> dialog = new CreateViewDialog<>(service, defName, EntityView.class);
 					dialog.setOkClickHandler(new AddEventHandler());
 					dialog.show();
 				}

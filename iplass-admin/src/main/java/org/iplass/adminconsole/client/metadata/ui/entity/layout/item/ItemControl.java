@@ -24,13 +24,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import org.iplass.adminconsole.client.base.ui.widget.AbstractWindow;
-import org.iplass.adminconsole.client.metadata.ui.entity.layout.item.element.section.SectionController;
 import org.iplass.adminconsole.client.metadata.ui.entity.layout.metafield.MetaFieldUpdateEvent;
 import org.iplass.adminconsole.client.metadata.ui.entity.layout.metafield.MetaFieldUpdateHandler;
 import org.iplass.adminconsole.view.annotation.Refrectable;
 import org.iplass.adminconsole.view.annotation.generic.FieldReferenceType;
 
-import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.types.HeaderControls;
 import com.smartgwt.client.widgets.HeaderControl;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -59,9 +57,6 @@ public abstract class ItemControl extends AbstractWindow {
 
 	/** Entity定義名 */
 	protected final String defName;
-
-	/** SectionWindowController */
-	protected SectionController sectionController = GWT.create(SectionController.class);
 
 	/**
 	 * コンストラクタ

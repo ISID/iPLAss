@@ -30,7 +30,7 @@ import org.iplass.adminconsole.client.base.ui.widget.form.MtpForm;
 import org.iplass.adminconsole.client.base.ui.widget.form.MtpTextItem;
 import org.iplass.adminconsole.client.base.util.SmartGWTUtil;
 import org.iplass.adminconsole.shared.metadata.rpc.MetaDataServiceAsync;
-import org.iplass.mtp.view.generic.EntityView;
+import org.iplass.mtp.definition.Definition;
 
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -43,7 +43,7 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
  * @author lis3wg
  *
  */
-public class CreateViewDialog extends MtpDialog {
+public class CreateViewDialog<D extends Definition> extends MtpDialog {
 
 	/** 名前入力用アイテム */
 	private TextItem nameItem;
@@ -52,13 +52,16 @@ public class CreateViewDialog extends MtpDialog {
 	/** OKボタン押下後の処理 */
 	private MTPEventHandler okClickHandler;
 
+	private Class<D> defClass;
+
 	/**
 	 * コンストラクタ
 	 * @param service
 	 * @param defName
 	 * @param type
 	 */
-	public CreateViewDialog(final MetaDataServiceAsync service, final String defName) {
+	public CreateViewDialog(final MetaDataServiceAsync service, final String defName, final Class<D> defClass) {
+		this.defClass = defClass;
 
 		setTitle(AdminClientMessageUtil.getString("ui_metadata_entity_layout_CreateViewDialog_createNewView"));
 		setHeight(140);
@@ -100,10 +103,10 @@ public class CreateViewDialog extends MtpDialog {
 			}
 
 			//View定義を取得
-			service.getDefinition(TenantInfoHolder.getId(), EntityView.class.getName(), defName, new AdminAsyncCallback<EntityView>() {
+			service.getDefinition(TenantInfoHolder.getId(), defClass.getName(), defName, new AdminAsyncCallback<D>() {
 
 				@Override
-				public void onSuccess(EntityView ev) {
+				public void onSuccess(D ev) {
 					//作成済みのView定義名取得
 					String name = nameItem.getValue().toString();
 
