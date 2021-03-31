@@ -247,7 +247,7 @@ public class BinaryTemplateEditPane extends TemplateTypeEditPane implements HasE
 		} else {
 			downloadForm.setVisible(false);
 			lblRegistedStatus.setContents("Still no binary data.");
-			imgRegistedBinary.setSrc(null);
+			imgRegistedBinary.setSrc((String)null);
 			imgRegistedBinary.setVisible(false);
 		}
 	}

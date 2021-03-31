@@ -72,19 +72,21 @@ public abstract class MultiColumnDropLayout extends HLayout {
 	}
 
 	@Override
-	public void setDropTypes(String types) {
-		super.setDropTypes(types);
+	public Canvas setDropTypes(String types) {
+		Canvas canvas = super.setDropTypes(types);
 		for (ColumnLayout col : cols) {
 			col.setDropTypes(types);
 		}
+		return canvas;
 	}
 
 	@Override
-	public void setDropTypes(String... types) {
-		super.setDropTypes(types);
+	public Canvas setDropTypes(String... types) {
+		Canvas canvas = super.setDropTypes(types);
 		for (ColumnLayout col : cols) {
 			col.setDropTypes(types);
 		}
+		return canvas;
 	}
 
 	/**
