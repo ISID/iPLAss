@@ -26,7 +26,6 @@ import java.util.List;
 import org.iplass.mtp.entity.definition.PropertyDefinition;
 import org.iplass.mtp.impl.entity.EntityContext;
 import org.iplass.mtp.impl.entity.EntityHandler;
-import org.iplass.mtp.impl.entity.property.PropertyHandler;
 import org.iplass.mtp.impl.i18n.I18nUtil;
 import org.iplass.mtp.impl.i18n.MetaLocalizedString;
 import org.iplass.mtp.impl.metadata.MetaDataIllegalStateException;
@@ -34,11 +33,12 @@ import org.iplass.mtp.impl.metadata.MetaDataRuntime;
 import org.iplass.mtp.impl.util.ObjectUtil;
 import org.iplass.mtp.impl.view.generic.EntityViewRuntime;
 import org.iplass.mtp.impl.view.generic.FormViewRuntime;
+import org.iplass.mtp.impl.view.generic.HasEntityProperty;
 import org.iplass.mtp.impl.view.generic.element.property.MetaPropertyLayout;
 import org.iplass.mtp.view.generic.editor.DateRangePropertyEditor;
 import org.iplass.mtp.view.generic.editor.PropertyEditor;
 
-public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor {
+public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor implements HasEntityProperty {
 
 	/** SerialVersionUID */
 	private static final long serialVersionUID = 7750500799495855836L;
@@ -53,6 +53,9 @@ public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor {
 	/** プロパティエディタ */
 	private MetaPropertyEditor editor;
 
+	/** FromのNull許容フラグ */
+	private boolean inputNullFrom;
+
 	/** Toプロパティエディタ */
 	private MetaPropertyEditor toEditor;
 
@@ -64,6 +67,12 @@ public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor {
 
 	/** Toプロパティ表示名の多言語設定情報 */
 	private List<MetaLocalizedString> localizedToPropertyDisplayNameList = new ArrayList<MetaLocalizedString>();
+
+	/** ToのNull許容フラグ */
+	private boolean inputNullTo;
+
+	/** 同値許容フラグ */
+	private boolean equivalentInput;
 
 	/** エラーメッセージ */
 	private String errorMessage;
@@ -102,6 +111,22 @@ public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor {
 	public void setEditor(MetaPropertyEditor editor) {
 	    this.editor = editor;
 	}
+
+	/**
+	 *  FromのNull許容フラグを取得します。
+	 * @return inputNullFrom
+	 */
+	public boolean isInputNullFrom() {
+		return inputNullFrom;
+	}
+
+	/**
+	 * @param FromのNull許容フラグをセットする
+	 */
+	public void setInputNullFrom(boolean inputNullFrom) {
+		this.inputNullFrom = inputNullFrom;
+	}
+
 
 	/**
 	 * Toプロパティエディタを取得します。
@@ -164,6 +189,34 @@ public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor {
 	}
 
 	/**
+	 * @return inputNullFrom
+	 */
+	public boolean isInputNullTo() {
+		return inputNullTo;
+	}
+
+	/**
+	 * @param ToのNull許容フラグをセットする
+	 */
+	public void setInputNullTo(boolean inputNullTo) {
+		this.inputNullTo = inputNullTo;
+	}
+
+	/**
+	 * @return equivalentInput
+	 */
+	public boolean isEquivalentInput() {
+		return equivalentInput;
+	}
+
+	/**
+	 * @param 同値の登録の許容フラグをセットする
+	 */
+	public void setEquivalentInput(boolean equivalentInput) {
+		this.equivalentInput = equivalentInput;
+	}
+
+	/**
 	 * @return errorMessage
 	 */
 	public String getErrorMessage() {
@@ -210,13 +263,16 @@ public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor {
 			toEditor.applyConfig(e.getToEditor());
 		}
 
+		setInputNullFrom(e.isInputNullFrom());
+		setInputNullTo(e.isInputNullTo());
+		setEquivalentInput(e.isEquivalentInput());
+
+		toPropertyId = convertId(e.getToPropertyName(), metaContext, entity);
 		setToPropertyDisplayName(e.getToPropertyDisplayName());
+
 		localizedToPropertyDisplayNameList = I18nUtil.toMeta(e.getLocalizedToPropertyDisplayNameList());
 
-		PropertyHandler property = entity.getProperty(e.getToPropertyName(), metaContext);
-		if (property != null) {
-			toPropertyId = property.getId();
-		} else {
+		if (toPropertyId == null) {
 			throw new MetaDataIllegalStateException("to property name is not defined.");
 		}
 
@@ -245,12 +301,15 @@ public class MetaDateRangePropertyEditor extends MetaCustomPropertyEditor {
 			_editor.setToEditor(toEditor.currentConfig(propertyName));
 		}
 
-		PropertyHandler property = entity.getPropertyById(toPropertyId, metaContext);
-		if (property != null) {
-			_editor.setToPropertyName(property.getName());
+		if (toPropertyId != null) {
+			_editor.setToPropertyName(convertName(toPropertyId, metaContext, entity));
 			_editor.setToPropertyDisplayName(toPropertyDisplayName);
-			_editor.setLocalizedToPropertyDisplayNameList(I18nUtil.toDef(localizedToPropertyDisplayNameList));
 		}
+
+		_editor.setLocalizedToPropertyDisplayNameList(I18nUtil.toDef(localizedToPropertyDisplayNameList));
+		_editor.setInputNullFrom(inputNullFrom);
+		_editor.setInputNullTo(inputNullTo);
+		_editor.setEquivalentInput(equivalentInput);
 
 		_editor.setErrorMessage(errorMessage);
 		if (localizedErrorMessageList != null && !localizedErrorMessageList.isEmpty()) {

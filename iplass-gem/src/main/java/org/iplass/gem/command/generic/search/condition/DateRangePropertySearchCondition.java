@@ -27,15 +27,15 @@ import org.iplass.mtp.entity.definition.PropertyDefinition;
 import org.iplass.mtp.entity.query.condition.Condition;
 import org.iplass.mtp.entity.query.condition.expr.And;
 import org.iplass.mtp.entity.query.condition.expr.Or;
-import org.iplass.mtp.view.generic.editor.NumericRangePropertyEditor;
+import org.iplass.mtp.view.generic.editor.DateRangePropertyEditor;
 import org.iplass.mtp.view.generic.editor.PropertyEditor;
 
 /**
- * 数値範囲型の検索条件
+ * 日付範囲型の検索条件
  * @author ICOM Shojima
  */
 
-public class NumericRangePropertySearchCondition extends PropertySearchCondition {
+public class DateRangePropertySearchCondition extends PropertySearchCondition {
 
 	/**
 	 * コンストラクタ
@@ -43,7 +43,7 @@ public class NumericRangePropertySearchCondition extends PropertySearchCondition
 	 * @param editor プロパティエディタ
 	 * @param value 検索用の値
 	 */
-	public NumericRangePropertySearchCondition(PropertyDefinition definition,
+	public DateRangePropertySearchCondition(PropertyDefinition definition,
 			PropertyEditor editor, Object value) {
 		super(definition, editor, value);
 	}
@@ -55,18 +55,18 @@ public class NumericRangePropertySearchCondition extends PropertySearchCondition
 	 * @param value 検索用の値
 	 * @param parent 親ノード
 	 */
-	public NumericRangePropertySearchCondition(PropertyDefinition definition,
+	public DateRangePropertySearchCondition(PropertyDefinition definition,
 			PropertyEditor editor, Object value, String parent) {
 		super(definition, editor, value, parent);
 	}
 
 	/**
-	 * 数値範囲型の検索条件設定
+	 * 日付範囲型の検索条件設定
 	 * @return conditions 検索条件
 	 */
 	@Override
 	public List<Condition> convertNormalCondition() {
-		List<Condition> conditions = new ArrayList<Condition>();
+		List<Condition> conditions = new ArrayList<>();
 		String parentName = "";
 		Object[] obl = (Object[]) getValue();
 		//From-To検索
@@ -103,8 +103,7 @@ public class NumericRangePropertySearchCondition extends PropertySearchCondition
 	}
 
 	@Override
-	public NumericRangePropertyEditor getEditor() {
-		return (NumericRangePropertyEditor) super.getEditor();
+	public DateRangePropertyEditor getEditor() {
+		return (DateRangePropertyEditor) super.getEditor();
 	}
-
 }

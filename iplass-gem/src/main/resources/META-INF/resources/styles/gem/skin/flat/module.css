@@ -1846,6 +1846,8 @@ span.success, span.error {
     width: 45%; }
   .tbl-section .numericRange span:nth-child(2) input {
     margin-left: 4px; }
+  .tbl-section .dateRange span:nth-child(2) > input {
+    margin-left: 4px; }
 
 .tbl-reference th {
   width: 180px;

@@ -74,6 +74,20 @@ public class DateRangePropertyEditor extends CustomPropertyEditor implements Ran
 	@EntityViewField()
 	private PropertyEditor editor;
 
+	/** FromプロパティでNull入力を許容するか*/
+	@MetaFieldInfo(
+			displayName="Nullの入力を許可",
+			displayNameKey="generic_editor_DateRangePropertyEditor_inputNullFromDisplayNameKey",
+			inputType=InputType.CHECKBOX,
+			displayOrder=105,
+			description="入力値にNullを許可するか設定します。",
+			descriptionKey="generic_editor_DateRangePropertyEditor_inputNullFromDescriptionKey"
+	)
+	@EntityViewField(
+			referenceTypes={FieldReferenceType.SEARCHCONDITION, FieldReferenceType.DETAIL, FieldReferenceType.BULK}
+	)
+	private boolean inputNullFrom;
+
 	/** Toプロパティ名 */
 	@MetaFieldInfo(displayName="Toプロパティ名",
 			displayNameKey="generic_editor_DateRangePropertyEditor_toPropertyNameDisplaNameKey",
@@ -125,7 +139,7 @@ public class DateRangePropertyEditor extends CustomPropertyEditor implements Ran
 					TimestampPropertyEditor.class,
 					TimePropertyEditor.class
 					},
-			displayOrder=120,
+			displayOrder=125,
 			description="プロパティの型にあわせたプロパティエディタを選択してください。<br>"
 					+ "未指定の場合、プロパティエディタの設定が有効になります。",
 			descriptionKey="generic_editor_DateRangePropertyEditor_toEditorDescriptionKey"
@@ -135,6 +149,34 @@ public class DateRangePropertyEditor extends CustomPropertyEditor implements Ran
 		)
 	private PropertyEditor toEditor;
 
+	/** ToプロパティでNull入力を許容するか*/
+	@MetaFieldInfo(
+			displayName="Nullの入力を許可",
+			displayNameKey="generic_editor_DateRangePropertyEditor_inputNullToDisplayNameKey",
+			inputType=InputType.CHECKBOX,
+			displayOrder=130,
+			description="入力値にNullを許可するか設定します。",
+			descriptionKey="generic_editor_DateRangePropertyEditor_inputNullToDescriptionKey"
+	)
+	@EntityViewField(
+			referenceTypes={FieldReferenceType.SEARCHCONDITION, FieldReferenceType.DETAIL, FieldReferenceType.BULK}
+	)
+	private boolean inputNullTo;
+
+	/** 同値の入力を許容するか*/
+	@MetaFieldInfo(
+			displayName="同値の入力を許可",
+			displayNameKey="generic_editor_DateRangePropertyEditor_equivalentInputDisplayNameKey",
+			inputType=InputType.CHECKBOX,
+			displayOrder=135,
+			description="入力値に同値を許可するか設定します。",
+			descriptionKey="generic_editor_DateRangePropertyEditor_equivalentInputDescriptionKey"
+	)
+	@EntityViewField(
+			referenceTypes={FieldReferenceType.SEARCHCONDITION, FieldReferenceType.DETAIL, FieldReferenceType.BULK}
+	)
+	private boolean equivalentInput;
+
 	/** エラーメッセージ */
 	@MetaFieldInfo(displayName="エラーメッセージ",
 			displayNameKey="generic_editor_DateRangePropertyEditor_errorMessageNameDisplaNameKey",
@@ -142,7 +184,7 @@ public class DateRangePropertyEditor extends CustomPropertyEditor implements Ran
 			descriptionKey="generic_editor_DateRangePropertyEditor_errorMessageNameDescriptionKey",
 			inputType=InputType.MULTI_LANG,
 			multiLangField = "localizedErrorMessageList",
-			displayOrder=130
+			displayOrder=140
 	)
 	@EntityViewField()
 	@MultiLang()
@@ -153,7 +195,7 @@ public class DateRangePropertyEditor extends CustomPropertyEditor implements Ran
 			displayName="多言語設定情報",
 			displayNameKey="generic_editor_DateRangePropertyEditor_localizedErrorMessageListDisplaNameKey",
 			inputType=InputType.MULTI_LANG_LIST,
-			displayOrder=140
+			displayOrder=145
 	)
 	@EntityViewField()
 	private List<LocalizedStringDefinition> localizedErrorMessageList;
@@ -191,6 +233,20 @@ public class DateRangePropertyEditor extends CustomPropertyEditor implements Ran
 	 */
 	public void setEditor(PropertyEditor editor) {
 		this.editor = editor;
+	}
+
+	/**
+	 * @return inputNullFrom
+	 */
+	public boolean isInputNullFrom() {
+		return inputNullFrom;
+	}
+
+	/**
+	 * @param FromのNull許容フラグをセットする
+	 */
+	public void setInputNullFrom(boolean inputNullFrom) {
+		this.inputNullFrom = inputNullFrom;
 	}
 
 	/**
@@ -250,6 +306,35 @@ public class DateRangePropertyEditor extends CustomPropertyEditor implements Ran
 	public void setLocalizedToPropertyDisplayNameList(List<LocalizedStringDefinition> localizedToPropertyDisplayNameList) {
 		this.localizedToPropertyDisplayNameList = localizedToPropertyDisplayNameList;
 	}
+
+	/**
+	 * @return inputNullTo
+	 */
+	public boolean isInputNullTo() {
+		return inputNullTo;
+	}
+
+	/**
+	 * @param ToのNull許容フラグをセットする
+	 */
+	public void setInputNullTo(boolean inputNullTo) {
+		this.inputNullTo = inputNullTo;
+	}
+
+	/**
+	 * @return equivalentInput
+	 */
+	public boolean isEquivalentInput() {
+		return equivalentInput;
+	}
+
+	/**
+	 * @param 同値の登録の許容フラグをセットする
+	 */
+	public void setEquivalentInput(boolean equivalentInput) {
+		this.equivalentInput = equivalentInput;
+	}
+
 
 	/**
 	 * @return errorMessage

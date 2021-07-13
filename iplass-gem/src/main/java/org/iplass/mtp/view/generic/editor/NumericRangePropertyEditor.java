@@ -125,7 +125,7 @@ public class NumericRangePropertyEditor extends CustomPropertyEditor implements 
 	/** Toプロパティ表示名の多言語設定情報 */
 	@MetaFieldInfo(
 			displayName="詳細検索でのToプロパティ表示名の多言語設定",
-			displayNameKey="generic_editor_NumeriRangePropertyEditor_localizedToPropertyDisplayNameListDisplaNameKey",
+			displayNameKey="generic_editor_NumericRangePropertyEditor_localizedToPropertyDisplayNameListDisplaNameKey",
 			inputType=InputType.MULTI_LANG_LIST,
 			displayOrder=120
 	)
@@ -332,7 +332,7 @@ public class NumericRangePropertyEditor extends CustomPropertyEditor implements 
 	/**
 	 * @return equivalentInput
 	 */
-	public boolean getEquivalentInput() {
+	public boolean isEquivalentInput() {
 		return equivalentInput;
 	}
 

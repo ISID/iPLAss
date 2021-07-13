@@ -1610,6 +1610,8 @@ div.recursiveTree {
       width: 8%; }
   .tbl-section .numericRange span:nth-child(2) input {
     margin-left: 4px; }
+  .tbl-section .dateRange span:nth-child(2) > input {
+    margin-left: 4px; }
 
 .tbl-reference {
   border: 1px solid #d5d5d5;

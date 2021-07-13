@@ -729,12 +729,12 @@ public class DetailCommandContext extends RegistrationCommandContext
 	private void addNestTableRegistHandler(ReferenceProperty p, List<Entity> list, EntityDefinition red, PropertyItem property) {
 		// ネストテーブルはプロパティ単位で登録可否決定
 		if (!NestTableReferenceRegistHandler.canRegist(property, getRegistrationPropertyBaseHandler())) return;
-		
+
 		// カスタム登録処理によるNestTableの更新制御
 		ReferenceRegistOption option = null;
 		if (currentEntity != null) {
 			option = getRegistrationInterrupterHandler().getNestTableRegistOption(red, p.getName());
-			
+
 			// isSpecifyAllPropertiesがtrue、且つReference項目が除外、且つNestされたEntityの個々プロパティも全て指定なしの場合
 			// 参照先EntityにおけるEntityのデータ追加、更新不可
 			if (option.isSpecifyAllProperties() && !option.isSpecifiedAsReference()
@@ -742,9 +742,9 @@ public class DetailCommandContext extends RegistrationCommandContext
 				return;
 			}
 		}
-		
+
 		ReferencePropertyEditor editor = (ReferencePropertyEditor) property.getEditor();
-		
+
 		List<Entity> target = null;
 		if (StringUtil.isNotBlank(editor.getTableOrderPropertyName())) {
 			//表示順再指定
@@ -846,12 +846,12 @@ public class DetailCommandContext extends RegistrationCommandContext
 	private void addReferenceSectionRegistHandler(final ReferenceProperty p, final List<ReferenceSectionValue> list, EntityDefinition red, ReferenceSectionPropertyItem property) {
 		// 参照セクションはプロパティ単位で登録可否決定
 		if (!ReferenceSectionReferenceRegistHandler.canRegist(property)) return;
-		
+
 		// カスタム登録処理による参照セクションの更新制御
 		ReferenceRegistOption option = null;
 		if (currentEntity != null) {
 			option = getRegistrationInterrupterHandler().getNestTableRegistOption(red, p.getName());
-			
+
 			// isSpecifyAllPropertiesがtrue、且つReference項目が除外、且つNestされたEntityの個々プロパティも全て指定なしの場合
 			// 参照先EntityにおけるEntityのデータ更新不可
 			if (option.isSpecifyAllProperties() && !option.isSpecifiedAsReference()
@@ -859,7 +859,7 @@ public class DetailCommandContext extends RegistrationCommandContext
 				return;
 			}
 		}
-		
+
 		ReferenceRegistHandler handler = ReferenceSectionReferenceRegistHandler.get(this, list, red, p, property, option);
 		if (handler != null) {
 			//handler.setForceUpdate(forceUpadte); //参照セクションはSection毎に個別設定になるので、Handler内で設定
@@ -1133,15 +1133,27 @@ public class DetailCommandContext extends RegistrationCommandContext
 	private void checkDateRange(DateRangePropertyEditor editor, Entity entity, String fromName, String toName, String errorPrefix) {
 		java.util.Date from = entity.getValue(fromName);
 		java.util.Date to = entity.getValue(editor.getToPropertyName());
-		if (from != null && to != null && from.compareTo(to) >= 0) {
-			String errorMessage = TemplateUtil.getMultilingualString(editor.getErrorMessage(), editor.getLocalizedErrorMessageList());
-			if (StringUtil.isBlank(errorMessage )) {
-				errorMessage = resourceString("command.generic.detail.DetailCommandContext.invalitDateRange");
+
+		if (from == null && to != null) {
+			if (!editor.isInputNullFrom()) {
+				setValidateErrorMessage(editor, fromName, errorPrefix, "command.generic.detail.DetailCommandContext.inputDateRangeErr");
 			}
-			ValidateError e = new ValidateError();
-			e.setPropertyName(errorPrefix + fromName + "_" + editor.getToPropertyName());//fromだけだとメッセージが変なとこに出るので細工
-			e.addErrorMessage(errorMessage);
-			getErrors().add(e);
+		} else if (from != null && to == null) {
+			if (!editor.isInputNullTo()) {
+				setValidateErrorMessage(editor, fromName, errorPrefix, "command.generic.detail.DetailCommandContext.inputDateRangeErr");
+			}
+		} else if (from != null && to != null) {
+			boolean result = false;
+
+			if (editor.isEquivalentInput()) {
+				result = (from.compareTo(to) > 0) ? true : false;
+			} else {
+				result = (from.compareTo(to) >= 0) ? true : false;
+			}
+
+			if (result) {
+				setValidateErrorMessage(editor, fromName, errorPrefix, "command.generic.detail.DetailCommandContext.invalidDateRange");
+			}
 		}
 	}
 
@@ -1170,7 +1182,7 @@ public class DetailCommandContext extends RegistrationCommandContext
 		} else if (from_tmp != null && to_tmp != null) {
 			boolean result = false;
 
-			if (editor.getEquivalentInput()) {
+			if (editor.isEquivalentInput()) {
 				result = (from_tmp.compareTo(to_tmp) > 0) ? true : false;
 			} else {
 				result = (from_tmp.compareTo(to_tmp) >= 0) ? true : false;
@@ -1199,7 +1211,7 @@ public class DetailCommandContext extends RegistrationCommandContext
 	}
 
 	/**
-	 * 数値範囲のチェック_エラーメッセージの設定
+	 * エラーメッセージの設定
 	 * @param editor
 	 * @param entity
 	 * @param fromName
@@ -1207,7 +1219,7 @@ public class DetailCommandContext extends RegistrationCommandContext
 	 * @param inputNullFlag
 	 * @param comparisonFlag
 	 */
-	private void setValidateErrorMessage(NumericRangePropertyEditor editor, String fromName, String errorPrefix, String resourceStringKey) {
+	private void setValidateErrorMessage(RangePropertyEditor editor, String fromName, String errorPrefix, String resourceStringKey) {
 		String errorMessage = TemplateUtil.getMultilingualString(editor.getErrorMessage(), editor.getLocalizedErrorMessageList());
 		if (StringUtil.isBlank(errorMessage )) {
 			errorMessage = resourceString(resourceStringKey);

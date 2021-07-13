@@ -59,4 +59,14 @@ public interface RangePropertyEditor {
 	 * @return localizedToPropertyDisplayNameList
 	 */
 	public List<LocalizedStringDefinition> getLocalizedToPropertyDisplayNameList();
+
+	/**
+	 * @return errorMessage
+	 */
+	public String getErrorMessage();
+
+	/**
+	 * @return localizedErrorMessageList
+	 */
+	public List<LocalizedStringDefinition> getLocalizedErrorMessageList();
 }

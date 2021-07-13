@@ -4087,9 +4087,9 @@ function addNestRow_DateRange(head, cell, idx) {
 	//.と[]はjQueryのセレクタに使われてるので\\つける
 	var prefixIdx = prefix.replace("idx", idx).replace("[", "\\[").replace("]", "\\]");
 	var fromSelector = "#daterange_" + prefixIdx + fromPropName;
-	var $from = $(cell).children(fromSelector);
+	var $from = $(cell).find(".dateRange").children(fromSelector);
 	var toSelector = "#daterange_" + prefixIdx + toPropName;
-	var $to = $(cell).children(toSelector);
+	var $to = $(cell).find(".dateRange").children(toSelector);
 
 	if (propType == "Date") {
 		//日付

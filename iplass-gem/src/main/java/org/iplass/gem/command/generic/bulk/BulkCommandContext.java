@@ -63,6 +63,7 @@ import org.iplass.mtp.view.generic.editor.JoinPropertyEditor;
 import org.iplass.mtp.view.generic.editor.NestProperty;
 import org.iplass.mtp.view.generic.editor.NumericRangePropertyEditor;
 import org.iplass.mtp.view.generic.editor.PropertyEditor;
+import org.iplass.mtp.view.generic.editor.RangePropertyEditor;
 import org.iplass.mtp.view.generic.editor.ReferencePropertyEditor;
 import org.iplass.mtp.view.generic.editor.ReferencePropertyEditor.ReferenceDisplayType;
 import org.iplass.mtp.view.generic.element.property.PropertyColumn;
@@ -705,15 +706,27 @@ public class BulkCommandContext extends RegistrationCommandContext {
 	private void checkDateRange(DateRangePropertyEditor editor, Entity entity, String fromName, String toName, String errorPrefix) {
 		java.util.Date from = entity.getValue(fromName);
 		java.util.Date to = entity.getValue(editor.getToPropertyName());
-		if (from != null && to != null && from.compareTo(to) >= 0) {
-			String errorMessage = TemplateUtil.getMultilingualString(editor.getErrorMessage(), editor.getLocalizedErrorMessageList());
-			if (StringUtil.isBlank(errorMessage )) {
-				errorMessage = resourceString("command.generic.bulk.BulkCommandContext.invalitDateRange");
+
+		if (from == null && to != null) {
+			if (!editor.isInputNullFrom()) {
+				setValidateErrorMessage(editor, fromName, errorPrefix, "command.generic.detail.DetailCommandContext.inputDateRangeErr");
 			}
-			ValidateError e = new ValidateError();
-			e.setPropertyName(errorPrefix + fromName + "_" + editor.getToPropertyName());//fromだけだとメッセージが変なとこに出るので細工
-			e.addErrorMessage(errorMessage);
-			getErrors().add(e);
+		} else if (from != null && to == null) {
+			if (!editor.isInputNullTo()) {
+				setValidateErrorMessage(editor, fromName, errorPrefix, "command.generic.detail.DetailCommandContext.inputDateRangeErr");
+			}
+		} else if (from != null && to != null) {
+			boolean result = false;
+
+			if (editor.isEquivalentInput()) {
+				result = (from.compareTo(to) > 0) ? true : false;
+			} else {
+				result = (from.compareTo(to) >= 0) ? true : false;
+			}
+
+			if (result) {
+				setValidateErrorMessage(editor, fromName, errorPrefix, "command.generic.detail.DetailCommandContext.invalidDateRange");
+			}
 		}
 	}
 
@@ -742,7 +755,7 @@ public class BulkCommandContext extends RegistrationCommandContext {
 		} else if (from_tmp != null && to_tmp != null) {
 			boolean result = false;
 
-			if (editor.getEquivalentInput()) {
+			if (editor.isEquivalentInput()) {
 				result = (from_tmp.compareTo(to_tmp) > 0) ? true : false;
 			} else {
 				result = (from_tmp.compareTo(to_tmp) >= 0) ? true : false;
@@ -771,7 +784,7 @@ public class BulkCommandContext extends RegistrationCommandContext {
 	}
 
 	/**
-	 * 数値範囲のチェック_エラーメッセージの設定
+	 * エラーメッセージの設定
 	 * @param editor
 	 * @param entity
 	 * @param fromName
@@ -779,7 +792,7 @@ public class BulkCommandContext extends RegistrationCommandContext {
 	 * @param inputNullFlag
 	 * @param comparisonFlag
 	 */
-	private void setValidateErrorMessage(NumericRangePropertyEditor editor, String fromName, String errorPrefix, String resourceStringKey) {
+	private void setValidateErrorMessage(RangePropertyEditor editor, String fromName, String errorPrefix, String resourceStringKey) {
 		String errorMessage = TemplateUtil.getMultilingualString(editor.getErrorMessage(), editor.getLocalizedErrorMessageList());
 		if (StringUtil.isBlank(errorMessage )) {
 			errorMessage = resourceString(resourceStringKey);
